@@ -2,7 +2,7 @@ package com.fullstack.quizchallengeservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.context.annotation.Profile;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -10,18 +10,17 @@ import org.springframework.context.annotation.Profile;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BadgesEntity {
+public class BadgeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String type;
     private Integer level;
-    private Integer k;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "player_id",
             referencedColumnName = "email")
-    private ProfileEntity player;
+    private PlayerEntity player;
 }

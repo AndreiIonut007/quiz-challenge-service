@@ -1,6 +1,6 @@
 package com.fullstack.quizchallengeservice.controller;
 
-import com.fullstack.quizchallengeservice.model.Profile;
+import com.fullstack.quizchallengeservice.model.Player;
 import com.fullstack.quizchallengeservice.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/profile")
 public class ProfileController {
@@ -15,12 +16,12 @@ public class ProfileController {
     private ProfileService profileService;
 
     @PutMapping
-    public Profile configProfile(@Validated @RequestBody Profile profile){
-        return profileService.configProfile(profile);
+    public Player configProfile(@Validated @RequestBody Player player){
+        return profileService.configProfile(player);
     }
 
     @GetMapping
-    public Optional<Profile> getProfile(@RequestParam String id){
+    public Optional<Player> getProfile(@RequestParam String id){
         return profileService.getProfile(id);
     }
 

@@ -1,26 +1,26 @@
 package com.fullstack.quizchallengeservice.model;
 
-import jakarta.persistence.Column;
+import com.fullstack.quizchallengeservice.entity.BadgeEntity;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Profile {
+public class Player {
 
     @NotEmpty
     private String email;
-
-    @NotEmpty
-    private String icon;
-    @NotEmpty
-    private String name;
+    private String username;
+    private Long tokens;
+    private Set<BadgeEntity> badges;
+    private Integer rank;
 
 
 }
