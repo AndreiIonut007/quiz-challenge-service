@@ -20,9 +20,4 @@ public class ProfileController {
         return profileService.configProfile(player);
     }
 
-    @GetMapping
-    public Optional<Player> getProfile(@RequestParam String id){
-        return profileService.getProfile(id);
-    }
-
 }

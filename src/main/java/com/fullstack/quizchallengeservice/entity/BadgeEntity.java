@@ -3,6 +3,8 @@ package com.fullstack.quizchallengeservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -22,5 +24,6 @@ public class BadgeEntity {
     @JoinColumn(
             name = "player_id",
             referencedColumnName = "email")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private PlayerEntity player;
 }

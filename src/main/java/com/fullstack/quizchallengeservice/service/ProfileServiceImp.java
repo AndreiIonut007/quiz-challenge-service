@@ -5,6 +5,7 @@ import com.fullstack.quizchallengeservice.entity.PlayerEntity;
 import com.fullstack.quizchallengeservice.model.Player;
 import com.fullstack.quizchallengeservice.repository.BadgeRepository;
 import com.fullstack.quizchallengeservice.repository.PlayerRepository;
+import com.fullstack.quizchallengeservice.repository.QuizRepository;
 import com.fullstack.quizchallengeservice.utils.badges.*;
 import com.github.javafaker.Faker;
 import org.springframework.beans.BeanUtils;
@@ -24,6 +25,8 @@ public class ProfileServiceImp implements ProfileService {
 
     @Autowired
     private BadgeRepository badgeRepository;
+    @Autowired
+    private QuizRepository quizRepository;
 
     @Override
     public Player configProfile(Player player) {
@@ -67,8 +70,4 @@ public class ProfileServiceImp implements ProfileService {
         return faker.superhero().prefix() + faker.name().firstName() + faker.address().buildingNumber();
     }
 
-    @Override
-    public Optional<Player> getProfile(String id) {
-        return Optional.empty();
-    }
 }

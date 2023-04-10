@@ -21,7 +21,7 @@ public class QuizEntity {
     private String creator;
     private String title;
     private String timer;
-    private Date expirationDate;
+    private Date expDate;
 
     @Embedded
     private Rewards rewards;
