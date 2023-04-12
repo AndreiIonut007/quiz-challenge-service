@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface SaveQuizAnswersRepository extends JpaRepository<SaveQuizAnswersEntity, Long> {
     List<SaveQuizAnswersEntity> findAllByPlayer(String email);
+
+    List<SaveQuizAnswersEntity> findAllByQuizId(Long id);
 }

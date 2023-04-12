@@ -1,9 +1,9 @@
 package com.fullstack.quizchallengeservice.service;
 
-import com.fullstack.quizchallengeservice.entity.Question;
-import com.fullstack.quizchallengeservice.entity.QuizEntity;
-import com.fullstack.quizchallengeservice.entity.SaveQuizAnswersEntity;
+import com.fullstack.quizchallengeservice.entity.*;
 import com.fullstack.quizchallengeservice.model.Quiz;
+import com.fullstack.quizchallengeservice.repository.BadgeRepository;
+import com.fullstack.quizchallengeservice.repository.PlayerRepository;
 import com.fullstack.quizchallengeservice.repository.QuizRepository;
 import com.fullstack.quizchallengeservice.repository.SaveQuizAnswersRepository;
 import org.springframework.beans.BeanUtils;
@@ -23,13 +23,41 @@ public class QuizServiceImpl implements QuizService {
     @Autowired
     private SaveQuizAnswersRepository saveQuizAnswersRepository;
 
+    @Autowired
+    private PlayerRepository playerRepository;
+
+    @Autowired
+    private BadgeRepository badgeRepository;
+
     @Override
     public Quiz addQuiz(Quiz quiz) {
-        QuizEntity quizEntity = new QuizEntity();
-        BeanUtils.copyProperties(quiz, quizEntity);
-        quizEntity = quizRepository.save(quizEntity);
-        quiz.setId(quizEntity.getId());
+        Optional<PlayerEntity> playerEntity = playerRepository.findById(quiz.getCreator());
+        if (playerEntity.isPresent()) {
+            QuizEntity quizEntity = new QuizEntity();
+            BeanUtils.copyProperties(quiz, quizEntity);
+            quizEntity = quizRepository.save(quizEntity);
+            quiz.setId(quizEntity.getId());
+
+            Long debit = quizEntity.getRewards().getWinner() + quizEntity.getRewards().getSecPlace() + quizEntity.getRewards().getThirdPlace();
+            playerEntity.get().setTokens(playerEntity.get().getTokens() - debit);
+            playerRepository.save(playerEntity.get());
+
+            BadgeEntity badgeEntity = badgeRepository.findDefensiveBadgeByPlayer(playerEntity.get());
+            badgeEntity.setExecutedToday(badgeEntity.getExecutedToday() + 1);
+            if (badgeEntity.getExecutedToday().compareTo(badgeEntity.getLevel()) == 0) {
+                badgeEntity.setValid(false);
+                badgeEntity.setLevel(badgeEntity.getLevel() + 1);
+                playerEntity.get().setTokens(playerEntity.get().getTokens() + (10 / getRank(playerEntity.get().getEmail())) * playerEntity.get().getTokens());
+                playerRepository.save(playerEntity.get());
+            }
+            badgeRepository.save(badgeEntity);
+        }
+
         return quiz;
+    }
+
+    private Integer getRank(String email) {
+        return playerRepository.getRank(email);
     }
 
     @Override
@@ -94,7 +122,20 @@ public class QuizServiceImpl implements QuizService {
                     .correctAnswers(correctAnswers)
                     .uploadAnswer(new Date())
                     .build());
+
+            updateBadgeEntity(playerId);
         }
         return correctAnswers;
+    }
+
+    private void updateBadgeEntity(String playerId) {
+        PlayerEntity playerEntity = playerRepository.getReferenceById(playerId);
+        BadgeEntity badgeEntity = badgeRepository.findOffensiveBadgeByPlayer(playerEntity);
+        badgeEntity.setExecutedToday(badgeEntity.getExecutedToday() + 1);
+        if (badgeEntity.getExecutedToday().compareTo(badgeEntity.getLevel()) == 0) {
+            badgeEntity.setLevel(badgeEntity.getLevel() + 1);
+            badgeEntity.setValid(false);
+        }
+        badgeRepository.save(badgeEntity);
     }
 }

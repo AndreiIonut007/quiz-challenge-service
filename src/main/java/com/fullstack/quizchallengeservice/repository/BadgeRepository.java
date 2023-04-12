@@ -11,4 +11,10 @@ import java.util.Set;
 public interface BadgeRepository extends JpaRepository<BadgeEntity,Long> {
 
     Set<BadgeEntity> findAllByPlayer(PlayerEntity player);
+
+    @Query("Select b from BadgeEntity b where b.player = ?1 and b.type = 'Offensive'")
+    BadgeEntity findOffensiveBadgeByPlayer(PlayerEntity playerEntity);
+
+    @Query("Select b from BadgeEntity b where b.player = ?1 and b.type = 'Defensive'")
+    BadgeEntity findDefensiveBadgeByPlayer(PlayerEntity playerEntity);
 }

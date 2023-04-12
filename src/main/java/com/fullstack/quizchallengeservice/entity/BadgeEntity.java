@@ -6,6 +6,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -19,6 +22,9 @@ public class BadgeEntity {
 
     private String type;
     private Integer level;
+    private Integer executedToday;
+    private LocalDate lastUpdate;
+    private boolean valid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

@@ -14,10 +14,19 @@ import java.util.Optional;
 public class ProfileController {
     @Autowired
     private ProfileService profileService;
-
     @PutMapping
     public Player configProfile(@Validated @RequestBody Player player){
         return profileService.configProfile(player);
+    }
+
+    @GetMapping("/validate/creation")
+    public Boolean validateQuizCreation(@PathVariable String id){
+        return profileService.validateQuizCreation(id);
+    }
+
+    @GetMapping("/validate/selection")
+    public Boolean validateQuizSelection(@PathVariable String id){
+        return profileService.validateQuizSelection(id);
     }
 
 }

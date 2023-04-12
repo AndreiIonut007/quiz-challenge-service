@@ -2,6 +2,7 @@ package com.fullstack.quizchallengeservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 
 import java.sql.Time;
 import java.util.Date;
